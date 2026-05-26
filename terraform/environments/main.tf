@@ -17,7 +17,7 @@ terraform {
     key            = "global/terraform.tfstate"
     region         = "eu-west-2"
     encrypt        = true
-    use_lockflie = "weather-tracker-tflock"
+    use_lockfile   = true
   }
 }
 
@@ -28,4 +28,12 @@ provider "aws" {
 provider "azurerm" {
   features {}
   subscription_id = var.azure_subscription_id
+}
+
+module "aws" {
+  source       = "../modules/aws"
+  project_name = var.project_name
+  environment  = var.environment
+  aws_region   = var.aws_region
+  key_name     = var.key_name 
 }

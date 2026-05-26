@@ -29,3 +29,8 @@ variable "environment" {
   type        = string
   default     = "prod"
 }
+
+variable "key_name" {
+  description = "AWS key pair name for SSH access to EC2"
+  type        = string
+}
