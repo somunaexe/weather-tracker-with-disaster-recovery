@@ -17,3 +17,7 @@ output "ec2_public_ip" {
 output "s3_bucket_name" {
   value = aws_s3_bucket.weather_data.bucket
 }
+
+output "public_route_table_id" {
+  value = aws_route_table.public.id
+}

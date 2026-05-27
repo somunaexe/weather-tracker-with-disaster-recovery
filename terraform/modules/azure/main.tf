@@ -3,9 +3,9 @@ resource "azurerm_resource_group" "main" {
   name     = "${var.project_name}-rg"
   location = var.azure_region
 
-  lifecycle {
-    prevent_destroy = true
-  }
+#  lifecycle {
+#    prevent_destroy = true
+#  }
 
   tags = {
     Environment = var.environment
@@ -123,9 +123,9 @@ resource "azurerm_storage_account" "main" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-  lifecycle {
-    prevent_destroy = true
-  }
+#  lifecycle {
+#    prevent_destroy = true
+#  }
 
   tags = {
     Environment = var.environment

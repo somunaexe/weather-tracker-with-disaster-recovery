@@ -21,3 +21,11 @@ output "private_subnet_id" {
 output "storage_account_name" {
   value = azurerm_storage_account.main.name
 }
+
+# output "vpn_gateway_ip" {
+#   value = azurerm_public_ip.vpn_gateway.ip_address
+# }
+
+output "vnet_name" {
+  value = azurerm_virtual_network.main.name
+}

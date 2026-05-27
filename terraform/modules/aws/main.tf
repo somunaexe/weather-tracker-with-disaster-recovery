@@ -111,7 +111,7 @@ resource "aws_security_group" "ec2" {
 }
 
 # EC2 instance - the server running the weather app
-resource "aws_instance" "app" {
+ resource "aws_instance" "app" {
   ami                    = var.ec2_ami
   instance_type          = var.ec2_instance_type
   subnet_id              = aws_subnet.public.id
@@ -126,7 +126,7 @@ resource "aws_instance" "app" {
     Name        = "${var.project_name}-app-server"
     Environment = var.environment
   }
-}
+ }
 
 # S3 bucket - stores weather data
 resource "aws_s3_bucket" "weather_data" {

@@ -34,3 +34,8 @@ variable "key_name" {
   description = "AWS key pair name for SSH access to EC2"
   type        = string
 }
+
+variable "vpn_shared_key" {
+  description = "Shared secret for the VPN tunnel between AWS and Azure"
+  type        = string
+}
