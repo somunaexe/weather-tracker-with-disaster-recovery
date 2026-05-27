@@ -57,3 +57,13 @@ module "networking" {
   azure_vpn_gateway_ip = module.networking.azure_vpn_gateway_ip
   vpn_shared_key       = var.vpn_shared_key
 }
+
+module "dr" {
+  source          = "../modules/dr"
+  project_name    = var.project_name
+  environment     = var.environment
+  ec2_public_ip   = module.aws.ec2_public_ip
+  ec2_instance_id = module.aws.ec2_instance_id
+  azure_app_url   = "placeholder.azurewebsites.net"
+  domain_name     = var.domain_name
+}

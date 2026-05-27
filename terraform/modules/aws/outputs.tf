@@ -21,3 +21,7 @@ output "s3_bucket_name" {
 output "public_route_table_id" {
   value = aws_route_table.public.id
 }
+
+output "ec2_instance_id" {
+  value = aws_instance.app.id
+}

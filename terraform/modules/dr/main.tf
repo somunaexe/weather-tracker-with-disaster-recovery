@@ -1,14 +1,11 @@
-# ─── HEALTH CHECKS ──────────────────────────────────────
-
 # pings the EC2 every 30 seconds on port 80 at /health
-# if it fails 3 times in a row, Route53 switches to Azure
 resource "aws_route53_health_check" "primary" {
-  fqdn              = var.ec2_public_ip
+  ip_address        = var.ec2_public_ip
   port              = 80
   type              = "HTTP"
-  resource_path     = "/health" # my app needs to expose this endpoint
-  failure_threshold = "3"       # 3 consecutive failures triggers failover
-  request_interval  = "30"      # checks every 30 seconds
+  resource_path     = "/health"
+  failure_threshold = "3"
+  request_interval  = "30"
 
   tags = {
     Name        = "${var.project_name}-primary-health-check"
@@ -16,10 +13,7 @@ resource "aws_route53_health_check" "primary" {
   }
 }
 
-# ─── ROUTE53 DNS ────────────────────────────────────────
-
-# the DNS zone for my domain - like a phonebook for my app
-# after applying, i need to point my domain's nameservers to these
+# DNS zone for my domain
 resource "aws_route53_zone" "main" {
   name = var.domain_name
 
@@ -29,8 +23,7 @@ resource "aws_route53_zone" "main" {
   }
 }
 
-# primary DNS record - normally all traffic goes here (AWS EC2)
-# Route53 only stops using this if the health check above fails
+# primary record at root domain - all traffic goes here normally
 resource "aws_route53_record" "primary" {
   zone_id = aws_route53_zone.main.zone_id
   name    = var.domain_name
@@ -42,43 +35,40 @@ resource "aws_route53_record" "primary" {
 
   set_identifier  = "primary"
   health_check_id = aws_route53_health_check.primary.id
-  ttl             = 60        # DNS refreshes every 60 seconds
+  ttl             = 60
   records         = [var.ec2_public_ip]
 }
 
-# secondary DNS record - only gets traffic if primary health check fails
-# this is what makes the disaster recovery actually work
+# secondary record - CNAME must be on a subdomain not the apex
+# only gets traffic if primary health check fails
 resource "aws_route53_record" "secondary" {
   zone_id = aws_route53_zone.main.zone_id
-  name    = var.domain_name
+  name    = "www.${var.domain_name}"
   type    = "CNAME"
 
   failover_routing_policy {
-    type = "SECONDARY"  # sits on standby until AWS goes down
+    type = "SECONDARY"
   }
 
   set_identifier = "secondary"
   ttl            = 60
-  records        = [var.azure_app_url]  # points to Azure as the backup
+  records        = [var.azure_app_url]
 }
 
-# ─── CLOUDWATCH ALARMS ──────────────────────────────────
-
-# fires when EC2 CPU goes above 80% for 2 consecutive 2-minute periods
-# good early warning that the server is struggling before it actually goes down
+# fires when EC2 CPU goes above 80%
 resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
   alarm_name          = "${var.project_name}-ec2-cpu-high"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "2"    # has to be high for 2 periods in a row
+  evaluation_periods  = "2"
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
-  period              = "120"  # each period is 2 minutes
+  period              = "120"
   statistic           = "Average"
-  threshold           = "80"   # alert if CPU goes above 80%
+  threshold           = "80"
   alarm_description   = "EC2 CPU usage is above 80%"
 
   dimensions = {
-    InstanceId = var.ec2_instance_id  # watches my specific EC2 instance
+    InstanceId = var.ec2_instance_id
   }
 
   tags = {
@@ -87,8 +77,7 @@ resource "aws_cloudwatch_metric_alarm" "ec2_cpu" {
   }
 }
 
-# fires when the health check above starts failing
-# this is how i know Azure failover has kicked in
+# fires when health check starts failing - means Azure failover is active
 resource "aws_cloudwatch_metric_alarm" "health_check" {
   alarm_name          = "${var.project_name}-health-check-failed"
   comparison_operator = "LessThanThreshold"
@@ -97,7 +86,7 @@ resource "aws_cloudwatch_metric_alarm" "health_check" {
   namespace           = "AWS/Route53"
   period              = "60"
   statistic           = "Minimum"
-  threshold           = "1"    # 1 = healthy, 0 = failed
+  threshold           = "1"
   alarm_description   = "Primary health check is failing - Azure failover may be active"
 
   dimensions = {

@@ -39,3 +39,8 @@ variable "vpn_shared_key" {
   description = "Shared secret for the VPN tunnel between AWS and Azure"
   type        = string
 }
+
+variable "domain_name" {
+  description = "Domain name for the weather tracker app"
+  type        = string
+}

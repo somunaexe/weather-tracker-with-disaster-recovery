@@ -41,3 +41,11 @@ output "aws_vpn_tunnel_ip" {
 output "azure_vpn_gateway_ip" {
   value = module.networking.azure_vpn_gateway_ip
 }
+
+output "route53_nameservers" {
+  value = module.dr.route53_nameservers
+}
+
+output "health_check_id" {
+  value = module.dr.health_check_id
+}
