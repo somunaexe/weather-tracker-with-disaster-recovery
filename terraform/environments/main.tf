@@ -13,11 +13,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket         = "weather-tracker-tfstate"
-    key            = "global/terraform.tfstate"
-    region         = "eu-west-2"
-    encrypt        = true
-    use_lockfile   = true
+    bucket       = "weather-tracker-tfstate"
+    key          = "global/terraform.tfstate"
+    region       = "eu-west-2"
+    encrypt      = true
+    use_lockfile = true
   }
 }
 
@@ -35,5 +35,12 @@ module "aws" {
   project_name = var.project_name
   environment  = var.environment
   aws_region   = var.aws_region
-  key_name     = var.key_name 
+  key_name     = var.key_name
+}
+
+module "azure" {
+  source       = "../modules/azure"
+  project_name = var.project_name
+  environment  = var.environment
+  azure_region = var.azure_region
 }

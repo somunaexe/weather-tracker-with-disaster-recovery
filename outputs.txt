@@ -1,5 +1,0 @@
-ec2_public_ip = "18.133.240.70"
-private_subnet_id = "subnet-0280a9e28fc2b3255"
-public_subnet_id = "subnet-048e92b0c69b4c6ea"
-s3_bucket_name = "weather-tracker-weather-data"
-vpc_id = "vpc-088e841a74fb25068"

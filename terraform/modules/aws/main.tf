@@ -118,9 +118,9 @@ resource "aws_instance" "app" {
   vpc_security_group_ids = [aws_security_group.ec2.id]
   key_name               = var.key_name
 
-  lifecycle {
-    prevent_destroy = true
-  }
+#  lifecycle {
+#    prevent_destroy = true
+#  }
 
   tags = {
     Name        = "${var.project_name}-app-server"
@@ -132,9 +132,9 @@ resource "aws_instance" "app" {
 resource "aws_s3_bucket" "weather_data" {
   bucket = "${var.project_name}-weather-data"
 
-  lifecycle {
-    prevent_destroy = true
-  }
+#  lifecycle {
+#    prevent_destroy = true
+#  }
 
   tags = {
     Name        = "${var.project_name}-weather-data"
