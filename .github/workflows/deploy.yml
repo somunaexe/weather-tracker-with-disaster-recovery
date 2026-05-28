@@ -1,6 +1,5 @@
 name: Deploy Weather Tracker Website
 
-
 on:
   push:
     branches:
