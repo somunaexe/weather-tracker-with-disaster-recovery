@@ -36,10 +36,10 @@ variable "azure_vnet_cidr" {
   default = "10.1.0.0/16"
 }
 
-variable "azure_vpn_gateway_ip" {
-  type        = string
-  description = "Public IP of the Azure VPN gateway - known after Azure VPN gateway is created"
-}
+# variable "azure_vpn_gateway_ip" {
+#  type        = string
+#  description = "Public IP of the Azure VPN gateway - known after Azure VPN gateway is created"
+# }
 
 variable "vpn_shared_key" {
   type        = string

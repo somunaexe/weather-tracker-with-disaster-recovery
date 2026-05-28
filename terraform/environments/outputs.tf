@@ -34,13 +34,13 @@ output "azure_storage_account" {
   value = module.azure.storage_account_name
 }
 
-output "aws_vpn_tunnel_ip" {
-  value = module.networking.aws_vpn_tunnel1_address
-}
+# output "aws_vpn_tunnel_ip" {
+#   value = module.networking.aws_vpn_tunnel1_address
+# }
 
-output "azure_vpn_gateway_ip" {
-  value = module.networking.azure_vpn_gateway_ip
-}
+# output "azure_vpn_gateway_ip" {
+#   value = module.networking.azure_vpn_gateway_ip
+# }
 
 output "route53_nameservers" {
   value = module.dr.route53_nameservers

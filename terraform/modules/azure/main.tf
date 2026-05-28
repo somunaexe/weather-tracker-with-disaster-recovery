@@ -81,39 +81,39 @@ resource "azurerm_network_security_group" "main" {
 }
 
 # App service plan - defines the compute resources for the app
-# resource "azurerm_service_plan" "main" {
-#  name                = "${var.project_name}-asp"
-#  location            = azurerm_resource_group.main.location
-#  resource_group_name = azurerm_resource_group.main.name
-#  os_type             = "Linux"
-#  sku_name            = "F1"
+ resource "azurerm_service_plan" "main" {
+  name                = "${var.project_name}-asp"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  os_type             = "Linux"
+  sku_name            = "F1"
 
-#  tags = {
-#    Environment = var.environment
-#    Project     = var.project_name
-#  }
-#}
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
 
 # App service - runs the weather tracker app
-# resource "azurerm_linux_web_app" "main" {
-#  name                = "${var.project_name}-app"
-#  location            = azurerm_resource_group.main.location
-#  resource_group_name = azurerm_resource_group.main.name
-#  service_plan_id     = azurerm_service_plan.main.id
+ resource "azurerm_linux_web_app" "main" {
+  name                = "${var.project_name}-app"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  service_plan_id     = azurerm_service_plan.main.id
 
-# site_config {
-#    always_on = false # always_on not supported on free tier F1
-#  }
+ site_config {
+    always_on = false # always_on not supported on free tier F1
+  }
 
 #  lifecycle {
 #    prevent_destroy = true
 #  }
 
-#  tags = {
-#    Environment = var.environment
-#    Project     = var.project_name
-#  }
-#}
+  tags = {
+    Environment = var.environment
+    Project     = var.project_name
+  }
+}
 
 # Storage account - azure equivalent of S3
 resource "azurerm_storage_account" "main" {

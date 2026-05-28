@@ -54,7 +54,6 @@ module "networking" {
   azure_region         = var.azure_region
   azure_resource_group = module.azure.resource_group_name
   azure_vnet_name      = module.azure.vnet_name
-  azure_vpn_gateway_ip = module.networking.azure_vpn_gateway_ip
   vpn_shared_key       = var.vpn_shared_key
 }
 

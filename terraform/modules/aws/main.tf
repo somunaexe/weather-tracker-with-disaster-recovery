@@ -151,3 +151,14 @@ resource "aws_s3_bucket_public_access_block" "weather_data" {
   block_public_policy     = true
   restrict_public_buckets = true
 }
+
+# Elastic IP - gives the EC2 a permanent public IP that never changes on restart
+resource "aws_eip" "app" {
+  instance = aws_instance.app.id
+  domain   = "vpc"
+
+  tags = {
+    Name        = "${var.project_name}-eip"
+    Environment = var.environment
+  }
+}
