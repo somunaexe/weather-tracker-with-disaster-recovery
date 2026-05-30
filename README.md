@@ -5,11 +5,11 @@ A production-grade weather tracking application deployed across **AWS** and **Az
 > Built as a portfolio project to demonstrate multi-cloud architecture, infrastructure automation, disaster recovery engineering, and DevOps practices — not just a working app, but a showcase of cloud engineering knowledge across the full stack.
 
 ---
+<img src="./architecture.png" /> 
 
 ## 🏗️ Full Architecture
-(./architecture.png)
+
 ```
-<link href="architecture.html" rel="import" />
                     ┌─────────────────────────────────────────────┐
                     │                   USERS                      │
                     └─────────────────────┬───────────────────────┘
@@ -72,7 +72,7 @@ A production-grade weather tracking application deployed across **AWS** and **Az
 |---|---|---|
 | <img src="https://icon.icepanel.io/AWS/svg/Networking-Content-Delivery/Site-to-Site-VPN.svg" width="32"> | **Virtual Private Gateway** | AWS anchor point for the cross-cloud VPN tunnel. Attached to the VPC and propagates routes to the public route table |
 | <img src="https://icon.icepanel.io/AWS/svg/Networking-Content-Delivery/Customer-Gateway.svg" width="32"> | **Customer Gateway** | Tells AWS the public IP of the Azure VPN gateway so it knows where to send tunnel traffic |
-| <img src="https://icon.icepanel.io/AWS/svg/Networking-Content-Delivery/Site-to-Site-VPN.svg" width="32"> | **VPN Connection** | IPsec tunnel between AWS and Azure. Static routes only. Commented out — re-enable by uncommenting `terraform/modules/networking/main.tf` |
+| <img src="https://icon.icepanel.io/AWS/svg/Networking-Content-Delivery/Site-to-Site-VPN.svg" width="32"> | **VPN Connection** | IPsec tunnel between AWS and Azure. Static routes only. `terraform/modules/networking/main.tf` |
 
 ### AWS Network Layout
 
@@ -91,7 +91,7 @@ VPC — 10.0.0.0/16 (eu-west-2)
 │   └── Reserved for databases / private services
 │
 └── Virtual Private Gateway (vgw)
-    └── Customer Gateway → Azure VPN (commented out)
+    └── Customer Gateway → Azure VPN
 ```
 
 ---
@@ -111,16 +111,16 @@ VPC — 10.0.0.0/16 (eu-west-2)
 
 | | Service | What it does in this project |
 |---|---|---|
-| <img src="https://icon.icepanel.io/Azure/svg/Compute/App-Services.svg" width="32"> | **App Service** *(architecture ready, quota blocked)* | Would host the Node.js weather app as the DR failover target. F1 free plan (Linux). Commented out because Azure free accounts have a VM quota of 0. Full Terraform config exists — re-enable after quota increase or Pay As You Go upgrade |
-| <img src="https://icon.icepanel.io/Azure/svg/Compute/App-Service-Plans.svg" width="32"> | **App Service Plan** *(architecture ready, quota blocked)* | Defines the compute resources for the App Service. `F1` SKU (free tier, Linux). Commented out alongside the App Service |
+| <img src="https://icon.icepanel.io/Azure/svg/Compute/App-Services.svg" width="32"> | **App Service** | Hosts the Node.js weather app as the DR failover target. |
+| <img src="https://icon.icepanel.io/Azure/svg/Compute/App-Service-Plans.svg" width="32"> | **App Service Plan** *(architecture ready, quota blocked)* | Defines the compute resources for the App Service. `F1` SKU (free tier, Linux). |
 | <img src="https://icon.icepanel.io/Azure/svg/Storage/Storage-Accounts.svg" width="32"> | **Storage Account** | `weathertrackerexe` — Standard LRS storage account. Azure equivalent of AWS S3. Hosts the blob container for weather data |
 | <img src="https://icon.icepanel.io/Azure/svg/Storage/Storage-Accounts.svg" width="32"> | **Blob Container** | Private container `weather-data` inside the storage account. Mirrors the S3 bucket structure for weather history when the app runs on Azure |
 
-### Cross-Cloud Networking *(configured, commented out — ~£25/month)*
+### Cross-Cloud Networking
 
 | | Service | What it does in this project |
 |---|---|---|
-| <img src="https://icon.icepanel.io/Azure/svg/Networking/Virtual-Network-Gateways.svg" width="32"> | **VPN Gateway** | Azure side of the cross-cloud IPsec tunnel. `VpnGw1AZ` SKU with zone redundancy. Takes 30-45 minutes to provision. Commented out to avoid the fixed monthly charge |
+| <img src="https://icon.icepanel.io/Azure/svg/Networking/Virtual-Network-Gateways.svg" width="32"> | **VPN Gateway** | Azure side of the cross-cloud IPsec tunnel. `VpnGw1AZ` SKU with zone redundancy. Takes 30-45 minutes to provision. |
 | <img src="https://icon.icepanel.io/Azure/svg/Networking/Local-Network-Gateways.svg" width="32"> | **Local Network Gateway** | Tells Azure where the AWS network is — stores the AWS tunnel IP and CIDR `10.0.0.0/16`. Required for Azure to know how to route traffic to AWS |
 | <img src="https://icon.icepanel.io/Azure/svg/Networking/Virtual-Network-Gateways.svg" width="32"> | **VPN Connection** | The actual IPsec connection on the Azure side. Uses a shared key that matches the AWS VPN connection. Status was `Connected` when both gateways were active |
 | <img src="https://icon.icepanel.io/Azure/svg/Networking/Public-IP-Addresses.svg" width="32"> | **Public IP** | Static Standard SKU IP for the VPN gateway. Zone redundant (`zones = ["1","2","3"]`). Required by Azure VPN Gateway — it cannot use a dynamic IP |
@@ -140,7 +140,7 @@ Resource Group — weather-tracker-rg (uksouth)
     │   └── Reserved for private resources
     │
     └── GatewaySubnet — 10.1.255.0/27
-        ├── VPN Gateway (commented out — ~£25/month)
+        ├── VPN Gateway
         └── Public IP (static, zone-redundant)
 ```
 
