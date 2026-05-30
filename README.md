@@ -7,7 +7,7 @@ A production-grade weather tracking application deployed across **AWS** and **Az
 ---
 
 ## 🏗️ Full Architecture
-
+(./architecture.png)
 ```
 <link href="architecture.html" rel="import" />
                     ┌─────────────────────────────────────────────┐
